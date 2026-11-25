@@ -10,6 +10,7 @@ import queue
 import sys
 import threading
 import traceback
+import webbrowser
 from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
@@ -23,7 +24,8 @@ try:  # 拖放檔案（選用）：pip install tkinterdnd2
 except ImportError:
     HAS_DND = False
 
-CONFIG_PATH = os.path.join(os.path.expanduser("~"), ".zhconvert-long.json")
+FANHUAJI_URL = "https://zhconvert.org"
+CONFIG_PATH =os.path.join(os.path.expanduser("~"), ".zhconvert-long.json")
 TEXT_EXTS = (".txt", ".json", ".jsonl", ".md", ".srt", ".ass", ".ssa", ".csv",
              ".yml", ".yaml", ".xml", ".html", ".htm", ".ini", ".lrc", ".po")
 ENCODINGS = ["auto", "utf-8", "utf-8-sig", "gb18030", "big5", "utf-16"]
@@ -67,8 +69,9 @@ class App(BaseTk):
         self.font_b = ctk.CTkFont(family=family, size=20, weight="bold")
 
         self._build_header()
+        self._build_footer()  # 先 pack 在底部，分頁才不會把它擠掉
         self.tabs = ctk.CTkTabview(self, corner_radius=12)
-        self.tabs.pack(fill="both", expand=True, padx=16, pady=(0, 16))
+        self.tabs.pack(fill="both", expand=True, padx=16, pady=(0, 4))
         self._build_main_tab(self.tabs.add("轉換"))
         self._build_adv_tab(self.tabs.add("進階設定"))
 
@@ -90,6 +93,21 @@ class App(BaseTk):
             bar, values=["淺色", "深色", "系統"], command=self._set_appearance, font=self.font)
         self.appearance.set({"light": "淺色", "dark": "深色"}.get(self.cfg.get("appearance"), "系統"))
         self.appearance.pack(side="right")
+
+    def _build_footer(self):
+        # 依繁化姬服務條款標示使用其 API，並附上官網連結
+        bar = ctk.CTkFrame(self, fg_color="transparent")
+        bar.pack(side="bottom", fill="x", padx=20, pady=(0, 10))
+        small = ctk.CTkFont(family=self.font.cget("family"), size=12)
+        link_font = ctk.CTkFont(family=self.font.cget("family"), size=12, underline=True)
+        ctk.CTkLabel(bar, text="轉換服務由繁化姬提供：", font=small,
+                     text_color=("gray40", "gray65")).pack(side="left")
+        link = ctk.CTkLabel(bar, text=FANHUAJI_URL, font=link_font,
+                            text_color=("#1a5fb4", "#78aeed"), cursor="hand2")
+        link.pack(side="left")
+        link.bind("<Button-1>", lambda e: webbrowser.open(FANHUAJI_URL))
+        ctk.CTkLabel(bar, text="（非官方工具，與繁化姬及其作者無關）", font=small,
+                     text_color=("gray40", "gray65")).pack(side="left")
 
     def _build_main_tab(self, tab):
         tab.grid_columnconfigure(0, weight=1)
