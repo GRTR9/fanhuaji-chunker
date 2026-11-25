@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+build/
+dist/
+*.spec
+
+# 續傳快取與暫存檔（內含轉換中的文字）
+*.zhcache
+*.tmp
+
+# 開發筆記與本機設定
+CLAUDE.md
+.claude/
+
+# 編輯器 / 系統
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
