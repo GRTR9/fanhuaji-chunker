@@ -8,9 +8,8 @@
 
 **Windows：直接雙擊 `start.bat`。** 第一次會自動在 `.venv` 建立虛擬環境並安裝套件，之後只有 `requirements.txt` 變動時才重裝。
 
-> **ARM64 Windows（例如 Snapdragon 筆電）**：tkinterdnd2 附的 ARM64 拖放元件與 Python 內建的 Tcl 8.6 不相容，拖放會無法使用。
-> 請另外安裝 **x64 版 Python**（系統會自動模擬執行），`start.bat` 會優先使用它，並自動把舊的虛擬環境重建成 x64 版。
-> 沒有 x64 版也能用，只是要用「新增檔案」按鈕加入檔案。
+> **ARM64 Windows（例如 Snapdragon 筆電）**：tkinterdnd2 附的 ARM64 拖放元件與 Python 內建的 Tcl 8.6 不相容，
+> 程式會自動改用 Windows 原生拖放，一樣可以把檔案或資料夾從檔案總管拖進視窗，不需另外安裝任何東西。
 
 手動執行：
 

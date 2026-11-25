@@ -46,6 +46,11 @@ class App(BaseTk):
     def __init__(self):
         super().__init__()
         self.dnd_ok = getattr(self, "dnd_ok", False)
+        # tkdnd 不能用時（例如 Windows ARM64 版 Python），改用 Windows 原生拖放
+        self.native_drop = False
+        if not self.dnd_ok and sys.platform == "win32":
+            from win_drop import enable_file_drop
+            self.native_drop = enable_file_drop(self, self._add_paths)
         self.title("繁化姬長檔轉換器")
         self.geometry("920x700")
         self.minsize(780, 600)
@@ -98,7 +103,7 @@ class App(BaseTk):
         ctk.CTkButton(top, text="＋ 新增資料夾", width=110, font=self.font, command=self._pick_folder).pack(side="left", padx=8)
         ctk.CTkButton(top, text="清除", width=70, font=self.font, fg_color="transparent", border_width=1,
                       text_color=("gray20", "gray85"), command=self._clear_files).pack(side="left")
-        if self.dnd_ok:
+        if self.dnd_ok or self.native_drop:
             hint = "可直接把檔案拖進視窗"
         elif HAS_DND:
             hint = "此環境無法載入拖放元件，請用「新增檔案」"
